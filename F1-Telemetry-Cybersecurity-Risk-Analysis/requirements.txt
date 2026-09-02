@@ -1,4 +1,4 @@
 fastf1
 pandas
-matplotlib
+matplotlib 
 requests
