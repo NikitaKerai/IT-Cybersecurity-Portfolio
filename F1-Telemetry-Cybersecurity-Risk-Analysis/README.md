@@ -1,210 +1,185 @@
-# 🏎️ F1 Telemetry Cybersecurity Risk Analysis
+## 🔐 Cybersecurity Threat Model
 
-A Python-based cybersecurity research and simulation project investigating how cyber attacks affecting Formula One telemetry data could influence race-strategy decisions and operational outcomes.
+Formula One teams rely heavily on telemetry for real-time analysis and race-strategy decisions. This project explores how the integrity and availability of telemetry data could affect those decisions if the data were manipulated, delayed or made unavailable.
 
-## 📌 Project Overview
+Four controlled attack scenarios were simulated:
 
-Modern Formula One relies heavily on telemetry and data-driven decision-making. Race teams use information such as lap times, tyre performance, driver position and other telemetry to support strategic decisions throughout a race.
+| Attack | Description | Primary Security Impact |
+|---|---|---|
+| Spoofing | Telemetry values are replaced with misleading data | Integrity |
+| Tampering | Legitimate telemetry values are modified | Integrity |
+| Delay | Telemetry data reaches the decision process late | Availability / Integrity |
+| Denial of Service (DoS) | A proportion of telemetry data becomes unavailable | Availability |
 
-This project investigates the potential cybersecurity risks associated with telemetry-dependent race strategy.
-
-Using historical 2025 Formula One race data, I developed a Python-based simulation that creates a baseline race-strategy recommendation and then introduces controlled cyber attack scenarios to evaluate how manipulated, delayed or unavailable data could influence strategy decisions.
-
-The project combines data analysis, cybersecurity threat modelling and risk assessment to demonstrate how the integrity and availability of telemetry can affect data-driven decision-making.
-
----
-
-## 🎯 Research Question
-
-**How can a cybersecurity risk assessment framework be used to evaluate the effect of telemetry attacks on Formula One race-strategy systems?**
+The attacks are simulations performed against historical race data for defensive cybersecurity research. No live Formula One systems or infrastructure were targeted.
 
 ---
 
-## 🛠️ Technologies & Frameworks
+## 🛡️ Security Frameworks
 
-### Programming & Data Analysis
-- Python
-- pandas
-- matplotlib
-- requests
+The simulated attack scenarios were mapped against established cybersecurity concepts including:
 
-### Formula One Data
-- FastF1
-- OpenF1 API
+- **CIA Triad** — Confidentiality, Integrity and Availability
+- **STRIDE Threat Modelling** — including Spoofing, Tampering and Denial of Service
+- **NIST-style Risk Assessment** — likelihood and impact scoring used to prioritise identified risks
 
-### Cybersecurity
-- STRIDE Threat Modelling
-- CIA Triad
-- Cybersecurity Risk Assessment
-- NIST-oriented risk analysis
+The analysis identified telemetry **integrity** and **availability** as particularly important security properties because compromised data can influence downstream decision-making even when the underlying strategy software continues to operate normally.
 
 ---
 
-## ⚙️ Project Workflow
+## 📊 Attack Impact Across Races
 
-The project follows the workflow below:
+The simulation was applied across multiple 2025 Formula One races to measure how frequently attack scenarios changed the resulting strategy decision.
 
-1. Retrieve historical 2025 Formula One race data using FastF1.
-2. Process and clean race telemetry data.
-3. Generate telemetry-derived features.
-4. Create a baseline race-strategy recommendation.
-5. Introduce controlled cyber attack scenarios.
-6. Compare clean and attacked strategy recommendations.
-7. Measure changes in pit-stop recommendations.
-8. Estimate simulated race-position impact.
-9. Map attack scenarios using STRIDE and the CIA Triad.
-10. Perform cybersecurity risk assessment.
-11. Generate CSV results and visualisations.
-12. Use OpenF1 as an additional source for data validation.
+![Attack Impact by Race](images/graph_2_2025_attack_impact_by_race.png)
+
+The results demonstrate that different cyberattack types produce substantially different operational effects. Delayed telemetry produced the largest proportion of changed strategy decisions across the simulated races, while spoofing and tampering produced smaller but still measurable effects.
+
+This highlights an important cybersecurity principle: **the severity of an attack cannot be determined solely by whether a system remains operational — the reliability and timeliness of the data must also be considered.**
 
 ---
 
-## 📊 Telemetry Features
+## 🎭 Telemetry Spoofing
 
-The simulation derives several features from the race data to support strategy decisions.
+A spoofing scenario was used to demonstrate the effect of deliberately misleading telemetry values.
 
-### Median Lap Time
+![Clean vs Spoofed Lap Times](images/graph_4_2025_clean_vs_spoofed_lap_times.png)
 
-The median lap time is calculated for each race lap and is used as a baseline for comparison between drivers.
+The comparison shows how manipulated telemetry can create a significantly different representation of vehicle performance while retaining the general structure of the original data.
 
-### Pace Delta
+From a cybersecurity perspective, this represents an **integrity attack**. A downstream system could continue processing the data successfully while making decisions based on inaccurate information.
 
-The difference between a driver's lap time and the median lap time for that lap.
-
-### Tyre Degradation Proxy
-
-Changes in lap time during a driver's stint are used as a simplified indicator of tyre degradation.
-
-### Position Change
-
-Changes in race position are calculated for each driver throughout a race.
-
-These features are then used by the strategy model to generate one of three recommendations:
-
-- `PIT`
-- `CONSIDER PIT`
-- `STAY OUT`
+This demonstrates why telemetry validation, authenticated data sources and anomaly detection are important controls in data-driven operational environments.
 
 ---
 
-## 🚨 Simulated Cyber Attack Scenarios
+## 🔧 Telemetry Tampering
 
-Four controlled attack scenarios are simulated against the telemetry data.
+A second simulation modified telemetry associated with tyre degradation.
 
-### 1. Spoofing
+![Clean vs Tampered Tyre Degradation](images/graph_5_2025_clean_vs_tampered_tyre_degradation.png)
 
-Lap-time data is manipulated to simulate falsified telemetry being supplied to the strategy model.
+Tampering changes legitimate information after it has been generated or received. In a telemetry environment, this could cause analytics or strategy systems to interpret vehicle conditions incorrectly.
 
-The purpose of this scenario is to investigate whether false telemetry could influence strategic recommendations.
-
-### 2. Data Tampering
-
-The tyre-degradation proxy is modified to simulate unauthorised manipulation of data used by the strategy model.
-
-This evaluates the effect that compromised data integrity could have on pit-stop decisions.
-
-### 3. Telemetry Delay
-
-Tyre-life data is shifted to simulate stale or delayed information reaching the strategy system.
-
-This scenario explores how outdated telemetry could affect real-time decision-making.
-
-### 4. Denial of Service (DoS)
-
-A proportion of telemetry observations is removed to simulate reduced data availability.
-
-The simulation evaluates how loss of telemetry could affect the reliability of strategy decisions.
+The scenario demonstrates how compromised **data integrity** can propagate into downstream decision-making without necessarily causing an obvious system failure.
 
 ---
 
-## 📈 Impact Analysis
+## 🏁 Operational Impact
 
-The clean baseline data is compared against the attacked datasets.
+Cybersecurity risk becomes particularly important when compromised data affects operational decisions.
 
-The project measures:
+The simulation therefore measured the difference between the expected pit-stop recommendation and the recommendation produced under each attack scenario.
 
-- Number of strategy decisions changed
-- Percentage of strategy decisions changed
-- Clean vs attacked pit-stop recommendations
-- Pit-stop timing error
-- Average pit-stop error
-- Maximum pit-stop error
-- Simulated race-position impact
-- Attack impact by race
-- Decision accuracy under reduced telemetry availability
+![Average Pit Stop Error](images/graph_8_2025_average_pit_stop_error.png)
 
-These measurements provide a way of translating cybersecurity attacks into potential operational consequences.
+Tampering produced the largest average pit-stop error in the simulation, followed by denial-of-service conditions.
+
+This demonstrates that the attack producing the greatest number of changed decisions is not necessarily the attack producing the greatest operational consequence.
+
+### Simulated Position Impact
+
+The project also estimated the resulting impact on race position.
+
+![Simulated Position Impact](images/graph_9_2025_position_impact.png)
+
+Tampering produced the largest simulated position impact, demonstrating how compromised telemetry integrity could translate from a technical cybersecurity issue into an operational consequence.
 
 ---
 
-## 🔐 STRIDE Threat Modelling
+## ⚠️ Risk Assessment
 
-The simulated attacks are mapped against relevant STRIDE threat categories.
+The attack scenarios were assessed using likelihood and impact scoring to provide a simple risk-prioritisation model.
 
-| Attack Scenario | STRIDE Category |
+![NIST Risk Assessment](images/nist_risk_graph_2025.png)
+
+The assessment classified:
+
+| Threat | Risk Level |
 |---|---|
-| Spoofing | Spoofing |
-| Data Tampering | Tampering |
-| Telemetry Delay | Denial of Service |
-| Denial of Service | Denial of Service |
+| Spoofing | High |
+| Tampering | High |
+| Delay | Medium |
+| Denial of Service | Medium |
 
-This helps connect the technical simulations to an established cybersecurity threat-modelling approach.
-
----
-
-## 🛡️ CIA Triad Assessment
-
-The attack scenarios are also evaluated against the three principles of the CIA Triad:
-
-### Confidentiality
-Protecting information from unauthorised disclosure.
-
-### Integrity
-Ensuring that telemetry remains accurate and has not been improperly modified.
-
-### Availability
-Ensuring that telemetry remains accessible when required by race-strategy systems.
-
-Within this simulation, spoofing and tampering primarily affect **integrity**, while telemetry delay and denial-of-service scenarios affect **availability** and, in the case of delayed data, can also affect the usefulness and integrity of information used for decision-making.
+The results suggest that attacks affecting **telemetry integrity** deserve particular attention because manipulated data may remain syntactically valid and continue flowing through analytical systems while influencing decisions.
 
 ---
 
-## ⚠️ Cybersecurity Risk Assessment
+## 🔎 Key Findings
 
-A simplified likelihood × impact approach is used to calculate cybersecurity risk scores for the simulated attacks.
+The simulation produced several key cybersecurity observations:
 
-Each scenario is assigned:
+1. **Telemetry integrity is critical.** A system can remain technically available while still producing unreliable decisions if its input data has been manipulated.
 
-- Likelihood
-- Impact
-- Risk Score
-- Risk Level
+2. **Attack impact depends on the measurement used.** Delay generated the highest frequency of changed strategy decisions, while tampering produced the largest average pit-stop error and simulated position impact.
 
-Risk levels are classified as:
+3. **Availability and integrity failures behave differently.** Delayed or unavailable telemetry affects access to timely information, while spoofing and tampering can cause systems to confidently process incorrect information.
 
-- Low
-- Medium
-- High
+4. **Operational impact should be included in cyber-risk analysis.** Technical indicators alone do not fully describe the potential consequence of compromised telemetry.
 
-The purpose of the assessment is to combine the technical simulation results with cybersecurity risk analysis.
+5. **Data validation is an important defensive control.** Authentication, integrity checking, anomaly detection and resilient telemetry pipelines could reduce the likelihood that manipulated or incomplete data influences downstream decisions.
 
 ---
 
-## 🔎 OpenF1 Data Validation
+## 🛠️ Technologies & Skills Demonstrated
 
-A separate Python script uses the OpenF1 API as an additional data source.
-
-The validation process retrieves:
-
-- Formula One session metadata
-- Driver position data
-- Session timing information
-
-The script then produces validation outputs that compare the availability of selected data elements between FastF1 and OpenF1.
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- Formula One telemetry analysis
+- Data processing and visualisation
+- Cyberattack simulation
+- Threat modelling
+- STRIDE
+- CIA Triad
+- NIST-style risk assessment
+- Cyber risk analysis
+- Security control identification
 
 ---
 
-## 📂 Repository Structure
+## ⚙️ Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/NikitaKerai/IT-Cybersecurity-Portfolio.git
+cd IT-Cybersecurity-Portfolio/F1-Telemetry-Cybersecurity-Risk-Analysis
+```
+
+Install the required Python packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## ▶️ Running the Project
+
+Run the main simulation:
+
+```bash
+python src/main.py
+```
+
+Run the NIST risk-mapping analysis:
+
+```bash
+python src/nist_mapping.py
+```
+
+Run the OpenF1 validation:
+
+```bash
+python src/openf1_validation.py
+```
+
+---
+
+## 📁 Project Structure
 
 ```text
 F1-Telemetry-Cybersecurity-Risk-Analysis/
@@ -213,190 +188,32 @@ F1-Telemetry-Cybersecurity-Risk-Analysis/
 ├── requirements.txt
 ├── .gitignore
 │
-└── src/
-    ├── README.md
-    ├── main.py
-    ├── nist_mapping.py
-    └── openf1_validation.py
+├── src/
+│   ├── main.py
+│   ├── nist_mapping.py
+│   └── openf1_validation.py
+│
+└── images/
+    ├── graph_2_2025_attack_impact_by_race.png
+    ├── graph_4_2025_clean_vs_spoofed_lap_times.png
+    ├── graph_5_2025_clean_vs_tampered_tyre_degradation.png
+    ├── graph_8_2025_average_pit_stop_error.png
+    ├── graph_9_2025_position_impact.png
+    └── nist_risk_graph_2025.png
 ```
-
-Additional result files and graphs are generated when the scripts are executed.
 
 ---
 
-## 💻 Installation
+## ⚖️ Scope & Ethics
 
-### 1. Clone the repository
+This project is an educational cybersecurity simulation using historical Formula One data.
 
-Clone or download the IT & Cybersecurity Portfolio repository to your computer.
-
-### 2. Navigate to the F1 project directory
-
-```bash
-cd F1-Telemetry-Cybersecurity-Risk-Analysis
-```
-
-### 3. Create a virtual environment (recommended)
-
-Windows:
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-```
-
-macOS/Linux:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-### 4. Install the required Python packages
-
-```bash
-pip install -r requirements.txt
-```
-
-The project requires:
-
-- fastf1
-- pandas
-- matplotlib
-- requests
+The attack scenarios represent controlled manipulation of locally processed telemetry data and are intended to demonstrate cybersecurity risk-analysis concepts. No live Formula One team systems, networks, vehicles or infrastructure were accessed, tested or attacked.
 
 ---
 
-## ▶️ Running the Project
+## 🎯 Project Objective
 
-Run these commands from the main `F1-Telemetry-Cybersecurity-Risk-Analysis` directory.
+The objective of this project is to demonstrate the connection between **cybersecurity risk and operational decision-making**.
 
-### Main Cybersecurity Simulation
-
-```bash
-python src/main.py
-```
-
-The main script:
-
-- Retrieves 2025 F1 race data
-- Processes telemetry-derived features
-- Generates baseline strategy decisions
-- Simulates cyber attacks
-- Compares clean and attacked decisions
-- Calculates pit-stop errors
-- Estimates simulated position impact
-- Generates cybersecurity mappings
-- Produces CSV results
-- Generates graphs
-
-### OpenF1 Validation
-
-```bash
-python src/openf1_validation.py
-```
-
-This retrieves OpenF1 data and generates validation outputs.
-
-### NIST Risk Visualisation
-
-```bash
-python src/nist_mapping.py
-```
-
-This generates a visual representation of the project's risk assessment.
-
----
-
-## 📁 Generated Outputs
-
-Running the project generates several CSV files containing analysis results, including:
-
-- Attack comparison results
-- Attack summary
-- Pit-stop error analysis
-- Position-impact analysis
-- DoS impact analysis
-- STRIDE mapping
-- CIA Triad mapping
-- Cybersecurity risk assessment
-- Dataset summary
-- Baseline strategy outputs
-- Attack strategy outputs
-
-The project also generates visualisations inside the `graphs/` directory.
-
----
-
-## 🧠 Skills Demonstrated
-
-This project demonstrates practical experience in:
-
-**Cybersecurity**
-- Cybersecurity risk assessment
-- Threat modelling
-- STRIDE
-- CIA Triad
-- Data integrity and availability analysis
-- Security impact assessment
-
-**Programming**
-- Python
-- pandas
-- Data processing
-- Data manipulation
-- Automation
-- API requests
-
-**Data Analysis**
-- Formula One telemetry analysis
-- Data cleaning
-- Feature engineering
-- Comparative analysis
-- Data visualisation
-
-**Technical Skills**
-- FastF1
-- OpenF1 API
-- matplotlib
-- CSV data processing
-- Reproducible technical analysis
-- Technical documentation
-
----
-
-## ⚖️ Ethics & Scope
-
-This project is an academic cybersecurity simulation.
-
-It uses publicly available historical Formula One data and controlled manipulation of locally processed datasets.
-
-No live Formula One systems, team infrastructure, proprietary telemetry networks or operational race systems were accessed, attacked or tested.
-
-The attack scenarios are simplified simulations designed to investigate the potential consequences of compromised telemetry data. They should not be interpreted as representations of the internal architecture or security controls used by real Formula One teams.
-
----
-
-## 🎓 Academic Context
-
-This project was developed as part of my **MSc Computer Science with Cyber Security** at the **University of York**.
-
-The project combines my interests in cybersecurity, data analysis and Formula One to investigate how cyber risk can translate into operational and strategic consequences in a high-performance, data-driven environment.
-
----
-
-## 👤 Author
-
-**Nikita Kerai**
-
-MSc Computer Science with Cyber Security  
-BSc Computer Security and Forensics — First Class Honours
-
-Areas of interest:
-
-- Cybersecurity
-- IT Infrastructure
-- Cloud Technologies
-- Network Security
-- Security Operations
-- Data Analysis
+Rather than treating cybersecurity solely as a technical issue, the project demonstrates how compromised data integrity or availability can propagate through a data-driven system and potentially influence real-world decisions.
